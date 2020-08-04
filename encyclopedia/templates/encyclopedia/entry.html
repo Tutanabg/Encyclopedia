@@ -1,0 +1,30 @@
+
+{% extends "encyclopedia/layout.html" %}
+
+{% load markdown_deux_tags %}
+
+{% block title %}  
+
+      Encyclopedia: {{ title }}
+       
+{% endblock %}
+
+{% block body %}
+     
+     {% if entry %}
+
+    
+          
+            <p>{{ entry | markdown }}<a href="{% url 'encyclopedia:edit' title %}"         
+class="alert-link">Click here to Edit</a></p>
+
+         
+           
+
+     {% else %}
+      
+            <h1> Error: Requested Page was not found! </h1>
+
+     {% endif %} 
+               
+{% endblock %}
