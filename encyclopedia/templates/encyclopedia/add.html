@@ -1,1 +1,22 @@
 
+{% extends "encyclopedia/layout.html" %}
+
+{% load markdown_deux_tags %}
+
+{% block title %}
+    Encyclopedia
+{% endblock %}
+
+{% block body %}
+    <h1>Add New Page</h1>
+
+       {{ entry | markdown }}
+
+       
+
+    
+           
+ 
+
+{% endblock %}
+
