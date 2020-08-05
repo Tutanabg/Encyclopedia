@@ -19,16 +19,10 @@ from django.core.files.base import ContentFile
 entries = util.list_entries()
 
 
-
 class NewEntryForm(forms.Form):
       title = forms.CharField(label="Title", widget=forms.TextInput(attrs={'class' : 'form-control col-md-8 col-lg-8'}))
       content = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control col-md-8 col-lg-8', 'rows' : 10}))  
       
-
-
-      
-
-
 
 def index(request):
     return render( request, "encyclopedia/index.html", {
@@ -45,7 +39,6 @@ def choose(request):
      return render( request, "encyclopedia/choose.html",{
         "choose": random.choice(util.list_entries())
         })
-
 
 def new(request):
    if request.method == "POST":
@@ -69,46 +62,24 @@ def new(request):
    return render( request, "encyclopedia/new.html",{
              "form":NewEntryForm()
         })
-
-
-def e(request, title):
-  
-    post = util.get_entry(title)
-    if post is None: 
-        return render(request, "encyclopedia/index.html", { "entries": util.list_entries() })
-    
-    else:
-             form = NewEntryForm()
-             form.fields["title"].initial = title
-             form.fields["content"].initial = post
-             
-             
-             return render(request, "encyclopedia/edit.html", { "form": form})
-    
     
 def edit(request, title):
-  
-    post = util.get_entry(title)
-    if post: 
-        return render(request, "encyclopedia/slim.html", { "content": post})
-    
-    else:
-       
-             
-             return render(request, "encyclopedia/index.html", { "entries": util.list_entries()})
-
-
-
+        post = util.get_entry(title)
+        form = NewEntryForm() 
+        form.fields["title"].initial = title
+        form.fields["content"].initial = post
+        return render( request, "encyclopedia/edit.html",{
+             "form": form
+        })
+        
 def empty(request):
     return render( request, "encyclopedia/empty.html")
-
 
 def add(request):
     return render( request, "encyclopedia/add.html", {
         "entry": util.list_entries()
          })
       
-     
 def error(request):
     return render( request, "encyclopedia/error.html")
    
@@ -125,17 +96,7 @@ def search(request):
        return render( request, "encyclopedia/empty.html")
 
 
-def edt(request, entry): 
-     entryPage = util.get_entry(entry)
-     if entryPage is None:
-        return render(request, "encyclopedia/entry.html", { "entry": entry }) 
-     else: 
-        form = NewEntryForm()
-        form.fields["title"].initial = entry  
-        form.fields["title"].widget = forms.HiddenInput()
-        form.fields["content"].initial = entryPage     
-        form.fields["edit"].initial = True
-        return render(request, "encyclopedia/newEntry.html", { "form": form, "edit": form.fields["edit"].initial, "entryTitle": form.fields["title"].initial })
+
 
          
 
