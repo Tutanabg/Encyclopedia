@@ -64,13 +64,17 @@ def new(request):
         })
     
 def edit(request, title):
-        post = util.get_entry(title)
-        form = NewEntryForm() 
-        form.fields["title"].initial = title
-        form.fields["content"].initial = post
-        return render( request, "encyclopedia/edit.html",{
-             "form": form
-        })
+   post = util.get_entry(title)
+   form = NewEntryForm(request.POST or None, initial={'title': title, 'content':post})
+   if form.is_valid():
+            note = form.save(commit=True) 
+            note.save()
+            content = form.cleaned_data.get("content") 
+            content.save() 
+            return HttpResponseRedirect('/encyclopedia/index/')     
+   return render(request, "encyclopedia/edit.html", {"form":form})
+
+
         
 def empty(request):
     return render( request, "encyclopedia/empty.html")
